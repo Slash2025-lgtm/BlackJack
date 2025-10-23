@@ -35,7 +35,6 @@ public class App {
 
     public static void turnPhase() {
         System.out.println("\n=== Turn Phase ===");
-        int currentTurn = 0;
         player1Hand();
 
     }
@@ -63,12 +62,13 @@ public class App {
         while (turnPhase) {
 
             actions();
-            System.out.println("Please enter 1 of the options above: ");
-            String selected = keyboard.nextLine();
+            System.out.print("Please enter 1 of the options above: ");
+            String selected = keyboard.nextLine().trim();
 
             switch (selected) {
                 case "1":
                     player1Hand += hand.getValue();
+                    System.out.println(player1Name + "'s Current Hand: " + player1Hand);
                     break;
                 case "2":
                     player2Hand();
@@ -85,7 +85,7 @@ public class App {
         Deck deck = new Deck();
         System.out.println("It is currently " + player2Name + "'s turn");
         deck.shuffleDeck();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 2; i++) {
             Card card = deck.deal();
             hand.deal(card);
         }
@@ -103,16 +103,16 @@ public class App {
         while (turnPhase) {
 
             actions();
-            System.out.println("Please enter 1 of the options above: ");
-            String selected = keyboard.nextLine();
+            System.out.print("Please enter 1 of the options above: ");
+            String selected = keyboard.nextLine().trim();
 
             switch (selected) {
                 case "1":
                     player2Hand += hand.getValue();
-                    System.out.println(player2Name + "'s Hand: " + player2Hand);
+                    System.out.println(player2Name + "'s Current Hand: " + player2Hand);
                     break;
                 case "2":
-                    player2Hand();
+                    result();
                     turnPhase = false;
                     break;
                 default:
@@ -130,11 +130,11 @@ public class App {
         String winningPlayer = "";
         int lowestNumb = 0;
 
-        if ((21 - player1Hand) >= 0) {
+        if ((21 - player1Hand) >= 0 && player1Hand < 21) {
             winningPlayer = player1Name;
             lowestNumb = 21 - player1Hand;
 
-            if ((21 - player2Hand) < lowestNumb) {
+            if ((21 - player2Hand) < lowestNumb && player2Hand < 21) {
                 winningPlayer = player2Name;
 
             } else if ((21 - player2Hand == lowestNumb)) {
@@ -143,8 +143,9 @@ public class App {
 
             } else if (player1Hand > 21) {
                 winningPlayer = player2Name + "wins by default becuase " + player1Name + " has went over 21";
-
             }
+        } else {
+            winningPlayer = player2Name;
         }
 
         System.out.println("\n=== Result ===");
